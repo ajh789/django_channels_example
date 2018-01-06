@@ -2,15 +2,16 @@ from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, get_user_model
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-User = get_user_model()
+# User = get_user_model()
 
 # Create your views here.
 
 #@login_required(login_url='/login/')
 def user_list(request):
-    users = User.objects.select_related('logged_in_user')
+    users = User.objects.select_related('logged_in_user') # Field logged_in_user in model LoggedInUser
     for user in users:
         if hasattr(user, 'logged_in_user'):
             user.status = 'Online'
