@@ -1,11 +1,24 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import login, logout
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.urls import reverse
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, logout, get_user_model
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.decorators import login_required
+
+User = get_user_model()
 
 # Create your views here.
+
+#@login_required(login_url='/login/')
 def user_list(request):
-    return render(request, 'user_list.html')
+    users = User.objects.select_related('logged_in_user')
+    for user in users:
+        if hasattr(user, 'logged_in_user'):
+            user.status = 'Online'
+            user.is_logged_in = True
+        else:
+            user.status = 'Offline'
+            user.is_logged_in = False
+    return render(request, 'user_list.html', {'users': users})
 
 # Log in
 def signin(request):
@@ -20,6 +33,7 @@ def signin(request):
     return render(request, 'login.html', {'form': form})
 
 # Log out
+@login_required(login_url='/login/')
 def signout(request):
     logout(request)
     return redirect(reverse('example:login'))

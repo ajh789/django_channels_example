@@ -1,12 +1,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <a href="{% url 'example:logout' %}">Log out</a>
+  Hello
+  {% if user.is_authenticated %} {# Obj user seems to be a built-in object #}
+    {{ user.username }} <a href="{% url 'example:logout' %}">Log out</a>
+  {% else %}
+    guest <a href="{% url 'example:login' %}">Log in</a>
+  {% endif %}
   <br/>
   <ul>
-    {% for user in users %}
-      <li data-username="{{ user.username|escape }}">
-        {{ user.username|escape }}: {{ user.status|default:'offline' }}
+    {% for u in users %}
+      <li data-username="{{ u.username|escape }}">
+        {% if u == user %}
+          <span class="bg-info">{{ u.username|escape }}</span>:
+        {% else %}
+          <span>{{ u.username|escape }}</span>:
+        {% endif %}
+        {% if u.is_logged_in %}
+          <span class="bg-success">{{ u.status|default:'offline' }}</span>
+        {% else %}
+          <span class="bg-danger">{{ u.status|default:'offline' }}</span>
+        {% endif %}
       </li>
     {% endfor %}
   </ul>
@@ -16,9 +30,26 @@
   <script>
     var socket = new WebSocket('ws://' + window.location.host + '/users/');
 
-
-    socket.onopen = function open() {
+    socket.onopen = function () {
       console.log('WebSockets connection created.');
+    };
+    socket.onclose = function () {
+      console.log('WebSockets connection closed.');
+    };
+    
+    socket.onmessage = function message(event) {
+        console.log(event.data);
+        var data = JSON.parse(event.data)
+        var username = encodeURI(data['username'])
+        var user = $('li').filter(function () {
+          return $(this).data('username') == username;
+        });
+        // Newly registered user won't be displayed. Should add a new entry in list.
+        if (data['is_logged_in']) {
+          user.html(username + ': <span class="bg-success">Online</span>');
+        } else {
+          user.html(username + ': <span class="bg-danger">Offline</span>');
+        }
     };
 
     if (socket.readyState == WebSocket.OPEN) {

@@ -8,7 +8,8 @@ def ws_connect(message):
     Group('users').send({
         'text': json.dumps({
             'username': message.user.username,
-            'is_logged_in': True
+            'is_logged_in': True,
+            'ws_event': 'connect'
         })
     })
 
@@ -17,7 +18,8 @@ def ws_disconnect(message):
     Group('users').send({
         'text': json.dumps({
             'username': message.user.username,
-            'is_logged_in': False
+            'is_logged_in': False,
+            'ws_event': 'disconnect'
         })
     })
     Group('users').discard(message.reply_channel)
