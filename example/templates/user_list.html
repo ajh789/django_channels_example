@@ -3,13 +3,15 @@
 {% block content %}
   Hello
   {% if user.is_authenticated %} {# Obj user seems to be a built-in object #}
-    {{ user.username }} <a href="{% url 'example:logout' %}">Log out</a>
+    {{ user.username|escape }} <a href="{% url 'example:logout' %}">Log out</a>
   {% else %}
     guest <a href="{% url 'example:login' %}">Log in</a>
   {% endif %}
+  <input type="hidden" id="curr_username" value="{{ user.username|escape }}" />
   <br/>
-  <ul>
+  <ul id="userlist">
     {% for u in users %}
+      <!-- NOTE: We escape HTML to prevent XSS attacks. -->
       <li data-username="{{ u.username|escape }}">
         {% if u == user %}
           <span class="bg-info">{{ u.username|escape }}</span>:
@@ -40,16 +42,36 @@
     socket.onmessage = function message(event) {
         console.log(event.data);
         var data = JSON.parse(event.data)
+        // NOTE: We escape JavaScript to prevent XSS attacks.
         var username = encodeURI(data['username'])
         var user = $('li').filter(function () {
           return $(this).data('username') == username;
         });
-        // Newly registered user won't be displayed. Should add a new entry in list.
-        if (data['is_logged_in']) {
-          user.html(username + ': <span class="bg-success">Online</span>');
-        } else {
-          user.html(username + ': <span class="bg-danger">Offline</span>');
+//      console.log(user);
+        if (user.length == 1) { // Find a match
+          if (data['is_logged_in']) {
+            if (username == $('#curr_username').val()) {
+              user.html('<span class="bg-info">' + username + '</span>: <span class="bg-success">Online</span>');
+            } else {
+              user.html(username + ': <span class="bg-success">Online</span>');
+            }
+          } else {
+            user.html(username + ': <span class="bg-danger">Offline</span>');
+          }
+        } else { // No match, length should be 0
+          // Newly registered user should be shown. Add a new entry in list.
+          if (username != '') { // An none empty user name
+            var list = $('#userlist');
+            var user = $('<li data-username="'+ username +'"></li>');
+            if (data['is_logged_in']) {
+              user.html(username + ': <span class="bg-success">Online</span>');
+            } else {
+              user.html(username + ': <span class="bg-danger">Offline</span>');
+            }
+            list.append(user);
+          }
         }
+
     };
 
     if (socket.readyState == WebSocket.OPEN) {
