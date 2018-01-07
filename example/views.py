@@ -19,7 +19,7 @@ def user_list(request):
         else:
             user.status = 'Offline'
             user.is_logged_in = False
-    return render(request, 'user_list.html', {'users': users})
+    return render(request, 'example/user_list.html', {'users': users})
 
 # Log in
 def signin(request):
@@ -31,7 +31,7 @@ def signin(request):
             return redirect(reverse('example:user_list'))
         else:
             print(form.errors)
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'example/login.html', {'form': form})
 
 # Log out
 @login_required(login_url='/login/')
@@ -49,4 +49,4 @@ def singup(request):
             return redirect(reverse('example:login'))
         else:
             print(form.errors)
-    return render(request, 'signup.html', {'form': form})
+    return render(request, 'example/signup.html', {'form': form})

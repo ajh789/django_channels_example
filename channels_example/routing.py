@@ -1,7 +1,11 @@
 from channels.routing import route
-from example.consumers import ws_connect, ws_disconnect
+from channels.staticfiles import StaticFilesConsumer
 
 channel_routing = [
-    route('websocket.connect', ws_connect, path=r'^/example/'),
-    route('websocket.disconnect', ws_disconnect, path='^/example/')
+    route('http.request', StaticFilesConsumer()),
+    route('websocket.connect', 'example.consumers.ws_connect', path=r'^/example/'),
+    route('websocket.disconnect', 'example.consumers.ws_disconnect', path='^/example/'),
+    route('websocket.connect', 'chatroom.consumers.ws_connect', path=r'^/chatroom/'),
+    route('websocket.disconnect', 'chatroom.consumers.ws_disconnect', path=r'^/chatroom/'),
+    route('websocket.receive', 'chatroom.consumers.ws_receive', path=r'^/chatroom/'),
 ]
