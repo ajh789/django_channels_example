@@ -1,11 +1,10 @@
-import re
 import json
 import logging
 from channels import Group
 from channels.sessions import channel_session
 from chatroom.models import Room
 
-log = logging.getLogger(__name__)
+log = logging.getLogger(__name__) # Log utility is not working.
 log.setLevel(logging.CRITICAL)
 
 @channel_session
@@ -77,6 +76,5 @@ def ws_disconnect(message):
         label = message.channel_session['room']
         room = Room.objects.get(label=label)
         Group('chat-'+label, channel_layer=message.channel_layer).discard(message.reply_channel)
-#       Group('chat-'+label, channel_layer=message.channel_layer).discard(message.reply_channel)
     except (KeyError, Room.DoesNotExist):
         pass
