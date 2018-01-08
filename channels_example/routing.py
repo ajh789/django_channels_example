@@ -3,9 +3,11 @@ from channels.staticfiles import StaticFilesConsumer
 
 channel_routing = [
     route('http.request', StaticFilesConsumer()),
-    route('websocket.connect', 'example.consumers.ws_connect', path=r'^/example/'),
-    route('websocket.disconnect', 'example.consumers.ws_disconnect', path='^/example/'),
-    route('websocket.connect', 'chatroom.consumers.ws_connect', path=r'^/chatroom/'),
+    
+    route('websocket.connect'   , 'userlist.consumers.ws_connect'   , path=r'^/userlist/'),
+    route('websocket.disconnect', 'userlist.consumers.ws_disconnect', path=r'^/userlist/'),
+    
+    route('websocket.connect'   , 'chatroom.consumers.ws_connect'   , path=r'^/chatroom/'),
     route('websocket.disconnect', 'chatroom.consumers.ws_disconnect', path=r'^/chatroom/'),
-    route('websocket.receive', 'chatroom.consumers.ws_receive', path=r'^/chatroom/'),
+    route('websocket.receive'   , 'chatroom.consumers.ws_receive'   , path=r'^/chatroom/'),
 ]

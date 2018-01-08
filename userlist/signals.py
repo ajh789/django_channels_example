@@ -1,6 +1,6 @@
 from django.contrib.auth import user_logged_in, user_logged_out
 from django.dispatch import receiver
-from example.models import LoggedInUser
+from userlist.models import LoggedInUser
 
 @receiver(user_logged_in)
 def on_user_login(sender, **kwargs):

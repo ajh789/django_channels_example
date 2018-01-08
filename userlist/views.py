@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
-    return render(request, 'example/index.html')
+    return render(request, 'userlist/index.html')
 
 #@login_required(login_url='/login/')
 def user_list(request):
@@ -21,7 +21,7 @@ def user_list(request):
         else:
             user.status = 'Offline'
             user.is_logged_in = False
-    return render(request, 'example/user_list.html', {'users': users})
+    return render(request, 'userlist/user_list.html', {'users': users})
 
 # Log in
 def signin(request):
@@ -30,16 +30,16 @@ def signin(request):
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             login(request, form.get_user())
-            return redirect(reverse('example:user_list'))
+            return redirect(reverse('userlist:user_list'))
         else:
             print(form.errors)
-    return render(request, 'example/login.html', {'form': form})
+    return render(request, 'userlist/login.html', {'form': form})
 
 # Log out
 @login_required(login_url='/login/')
 def signout(request):
     logout(request)
-    return redirect(reverse('example:login'))
+    return redirect(reverse('userlist:login'))
 
 # Register
 def singup(request):
@@ -48,7 +48,7 @@ def singup(request):
         form = UserCreationForm(data=request.POST)
         if form.is_valid():
             form.save()
-            return redirect(reverse('example:login'))
+            return redirect(reverse('userlist:login'))
         else:
             print(form.errors)
-    return render(request, 'example/signup.html', {'form': form})
+    return render(request, 'userlist/signup.html', {'form': form})

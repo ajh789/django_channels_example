@@ -1,11 +1,11 @@
-{% extends 'example/base.html' %}
+{% extends 'userlist/base.html' %}
 {% block title %}
   Choose sub-site
 {% endblock %}
 {% block content %}
   Please choose:<br/>
   <ul>
-    <li><a href="{% url 'example:user_list' %}">Example</a></li>
+    <li><a href="{% url 'userlist:user_list' %}">User List</a></li>
     <li><a href="{% url 'chatroom:about' %}">Chat Room</a></li>
   </ul>
 {% endblock %}

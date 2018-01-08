@@ -16,11 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include, url
-from example.views import index
+from userlist.views import index
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^$', index, name='index'),
-    url(r'^example/', include('example.urls', namespace='example')),
+    url(r'^userlist/', include('userlist.urls', namespace='userlist')),
     url(r'^chatroom/', include('chatroom.urls', namespace='chatroom')),
 ]

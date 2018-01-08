@@ -1,7 +1,7 @@
 from django.conf.urls import url
-from example.views import user_list, signin, signout, singup
+from userlist.views import user_list, signin, signout, singup
 
-app_name='example'
+app_name='userlist'
 urlpatterns = [
     url(r'^$', user_list, name='user_list'),
     url(r'^login/$'  , signin , name='login'),

@@ -1,11 +1,11 @@
-{% extends 'example/base.html' %}
+{% extends 'userlist/base.html' %}
 
 {% block content %}
   Hello
   {% if user.is_authenticated %} {# Obj user seems to be a built-in object #}
-    {{ user.username|escape }} <a href="{% url 'example:logout' %}">Log out</a>
+    {{ user.username|escape }} <a href="{% url 'userlist:logout' %}">Log out</a>
   {% else %}
-    guest <a href="{% url 'example:login' %}">Log in</a>
+    guest <a href="{% url 'userlist:login' %}">Log in</a>
   {% endif %}
   <input type="hidden" id="curr_username" value="{{ user.username|escape }}" />
   <br/>
@@ -30,7 +30,7 @@
 
 {% block script %}
   <script>
-    var socket = new WebSocket('ws://' + window.location.host + '/example/users/');
+    var socket = new WebSocket('ws://' + window.location.host + '/userlist/users/');
 
     socket.onopen = function () {
       console.log('WebSockets connection created.');

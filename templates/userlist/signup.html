@@ -1,7 +1,7 @@
-{% extends 'example/base.html' %}
+{% extends 'userlist/base.html' %}
 
 {% block content %}
-  <form action="{% url 'example:singup' %}" method="post">
+  <form action="{% url 'userlist:singup' %}" method="post">
     {% csrf_token %}
     {% for field in form %}
       <div>
@@ -11,6 +11,6 @@
       </div>
     {% endfor %}
     <button type="submit">Sign up</button>
-    <p>Already have an account? <a href="{% url 'example:login' %}">Log in!</a></p>
+    <p>Already have an account? <a href="{% url 'userlist:login' %}">Log in!</a></p>
   </form>
 {% endblock content %}
