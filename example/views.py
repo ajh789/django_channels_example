@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 # User = get_user_model()
 
 # Create your views here.
+def index(request):
+    return render(request, 'example/index.html')
 
 #@login_required(login_url='/login/')
 def user_list(request):
