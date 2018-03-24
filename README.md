@@ -14,3 +14,6 @@ Fix a bug in original implementation of consumer function ws_connect, add an ext
 ```
 message.reply_channel.send({'accept': True})
 ```
+## Flow charts of app userlist
+### User list page loading
+![Alt text](/UserListPageLoading.jpg)
